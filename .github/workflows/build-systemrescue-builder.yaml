@@ -23,15 +23,15 @@ jobs:
       SYSRESCUE_ARCH: x86_64
       # Define the target image name in GHCR
       GHCR_IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/systemrescue-builder
+      # Define the directory name for the clone
+      REPO_DIR: systemrescue-sources
 
     steps:
-      - name: checkout SystemRescue repository
-        uses: actions/checkout@v4
-        with:
-          # Corrected: Use the official GitLab repository URL
-          repository: "https://gitlab.com/systemrescue/systemrescue-sources.git"
-          # Crucial: Check out submodules as required by the build instructions
-          submodules: "recursive"
+      - name: Clone SystemRescue repository from GitLab
+        run: |
+          # Use git clone directly to fetch the repository from GitLab
+          # --recurse-submodules is still critical
+          git clone --recurse-submodules https://gitlab.com/systemrescue/systemrescue-sources.git ${{ env.REPO_DIR }}
 
       - name: Log in to GitHub Container Registry (GHCR)
         uses: docker/login-action@v3
